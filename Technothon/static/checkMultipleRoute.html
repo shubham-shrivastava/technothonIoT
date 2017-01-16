@@ -1,0 +1,287 @@
+<style>
+#map-canvas {
+height: 60%;
+min-height: 400px;
+min-width: 300px;
+margin: 0px;
+padding: 0px
+}
+
+
+#panel {
+position: absolute;
+top: 5px;
+left: 50%;
+margin-left: -180px;
+z-index: 5;
+background-color: #fff;
+padding: 5px;
+border: 1px solid #999;
+}
+</style>
+
+
+<div id="panel">
+Origin: <select id="origin">
+	<option value="ShankarNagar, Nagpur, Maharashtra, India">ShankarNagar</option>
+	<option value="Burdi, Nagpur, Maharashtra, India">Burdi</option>
+	<option value="Sadar, Nagpur, Maharashtra, India">Sadar</option>
+	<option value="Itwari, Nagpur, Maharashtra, India">Itwari</option>
+</select> Destination: <select id="destination">
+	<option value="ShankarNagar, Nagpur, Maharashtra, India">ShankarNagar</option>
+	<option value="Burdi, Nagpur, Maharashtra, India">Burdi</option>
+	<option value="Sadar, Nagpur, Maharashtra, India">Sadar</option>
+	<option value="Itwari, Nagpur, Maharashtra, India">Itwari</option>
+</select> <input type="button" value="GetDirections" onclick="/*globals directionsService:true */
+calcRoute()">
+</div>
+<div id="map-canvas"></div>
+<br>
+<div class="row">
+	<div class= "col-sm-3 col-md-3 col-lg-3"></div>
+	<div class="col-sm-6 col-md-6 col-lg-6">
+	
+		<div id="V_table">
+	<table id="t1" class="table-fill">
+		<thead>
+			<tr>
+				<th class="text-left">Route_NO</th>
+				<th class="text-left">Distance</th>
+				<th class="text-left">Travel_Time</th>
+				<th class="text-left">AQI</th>
+			</tr>
+		</thead>
+		<tbody class="table-hover">
+			<tr>
+				<td class="text-left" id="tr1_color"></td>
+				<td class="text-left" id="tr1_dist"></td>
+				<td class="text-left" id="tr1_time"></td>
+				<td class="text-left" id="tr1_aqi"></td>
+			</tr>
+			<tr>
+				<td class="text-left" id="tr2_color"></td>
+				<td class="text-left" id="tr2_dist"></td>
+				<td class="text-left" id="tr2_time"></td>
+				<td class="text-left" id="tr2_aqi"></td>
+			</tr>
+			<tr>
+				<td class="text-left" id="tr3_color"></td>
+				<td class="text-left" id="tr3_dist"></td>
+				<td class="text-left" id="tr3_time"></td>
+				<td class="text-left" id="tr3_aqi"></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+	
+	</div>
+	<div class= "col-sm-3 col-md-3 col-lg-3"></div>
+</div>
+
+
+<div id="vertex-container">
+
+<ul id="vertex">
+</ul>
+</div>
+<script type="text/javascript">
+			 
+			var directionsDisplays = [];
+			directionsService = new google.maps.DirectionsService();   
+				
+			var map;
+
+function initialize() 
+{
+ for (var d = 0; d < 3; d++) 
+ {
+						 
+							var id1 = "tr"+(d+1)+"_dist";
+							var id2 = "tr"+(d+1)+"_time";
+							var id3 = "tr"+(d+1)+"_color";
+							var id4 = "tr"+(d+1)+"_aqi";
+					 
+						document.getElementById(id1).innerHTML="";
+						document.getElementById(id2).innerHTML="";
+						document.getElementById(id4).innerHTML="";
+						document.getElementById(id3).innerHTML="";
+						document.getElementById(id1).parentNode.style.backgroundColor = "white";
+						
+}
+			 
+var mapOptions = {
+							zoom: 13,
+							center: new google.maps.LatLng(21.1610282,78.932422)
+								};
+		 
+							map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+}
+
+
+function calcRoute() 
+{
+
+					var start = document.getElementById('origin').value;
+					var end = document.getElementById('destination').value;
+
+					
+					 var aqiTemp= [];
+		 var aqi=[];
+		 $.get("https://aqms-node.mybluemix.net/api/routes",function(data,status)
+		 {
+		
+					 for(var i=0;i<data.length;i++)
+		 {
+				aqiTemp.push(data[i].aqi);
+		 }
+		
+					
+				
+					var request = {
+							origin: start,
+							destination: end,
+							provideRouteAlternatives: true,
+							travelMode: google.maps.TravelMode.DRIVING
+					};
+					
+directionsService.route(request, function (response, status)
+{
+
+if (status == google.maps.DirectionsStatus.OK) 
+ {
+		if (response.routes && response.routes.length > 0) 
+		{
+										//console.log("U are here");
+											var routes = response.routes;
+					
+					for(var i=0;i<routes.length;i++)
+					{
+						 aqi.push(aqiTemp[i]);
+					}
+											var copyaqi  = aqi.slice();
+					aqi.sort(function(a, b){return a-b});
+											for (var j = 0; j < routes.length; j++) 
+											{
+							if(routes.length==1)
+						{
+							 //alert("here");
+							 var directionsDisplay = new google.maps.DirectionsRenderer({ map: map, directions: response, routeIndex: i,  polylineOptions: {
+														 strokeColor: "green"
+						 
+													 } });
+						}
+													for(i=0;i<routes.length;i++)
+													{
+														//alert("here in multiple");
+													if(aqi[j]==copyaqi[i])
+						{
+													 if(j==1)
+													 {
+													 var directionsDisplay = new google.maps.DirectionsRenderer({ map: map, directions: response, routeIndex: i,  polylineOptions: {
+													 strokeColor: "blue"
+						 
+													 } });
+													 }
+													 
+													 if(j==0)
+													 {
+													 var directionsDisplay = new google.maps.DirectionsRenderer({ map: map, directions: response, routeIndex: i,  polylineOptions: {
+													 strokeColor: "green"
+						
+						 
+													 } });
+													 }
+
+													 if(j==2)
+													 {
+													 var directionsDisplay = new google.maps.DirectionsRenderer({ map: map, directions: response, routeIndex: i,  polylineOptions: {
+													 strokeColor: "red"
+						
+													 } });
+													 }
+															 
+											 }
+												
+										 }
+
+										 
+				directionsDisplays.push(directionsDisplay);
+											
+													var points = routes[j].overview_path;
+													var ul = document.getElementById("vertex");
+													
+											}
+									
+				aqi2 = copyaqi.slice(); 
+									aqi_Burdi=50;					
+				copyaqi.sort();
+				//console.log("new"+copyaqi);
+				for (var d = 0; d < routes.length; d++) 
+											 {
+						if(routes.length==1)
+						{ 
+							var id1 = "tr"+(d+1)+"_dist";
+							var id2 = "tr"+(d+1)+"_time";
+							var id3 = "tr"+(d+1)+"_color";
+							var id4 = "tr"+(d+1)+"_aqi";
+					 
+						document.getElementById(id1).innerHTML=routes[d].legs[0].distance.text;
+						document.getElementById(id2).innerHTML=routes[d].legs[0].duration.text;
+						document.getElementById(id4).innerHTML=50;
+						document.getElementById(id3).innerHTML=d+1;
+						}
+						else
+						{
+						 var id1 = "tr"+(d+1)+"_dist";
+						 var id2 = "tr"+(d+1)+"_time";
+						 var id3 = "tr"+(d+1)+"_color";
+						 var id4 = "tr"+(d+1)+"_aqi";
+					 
+						document.getElementById(id1).innerHTML=routes[d].legs[0].distance.text;
+						document.getElementById(id2).innerHTML=routes[d].legs[0].duration.text;
+						document.getElementById(id4).innerHTML=aqi2[d];
+						document.getElementById(id3).innerHTML=d+1;
+						}
+						
+					}
+						
+					
+aqi2.sort(function(a, b){return a-b});
+
+for (var d = 0; d < routes.length; d++) 
+{
+ if(routes.length ==1)
+ {
+ var id4 = "tr"+(d+1)+"_aqi";
+ document.getElementById(id4).parentNode.style.backgroundColor = "green";
+ }
+ else
+ {
+ var id4 = "tr"+(d+1)+"_aqi";
+	if(aqi2[0]==(document.getElementById(id4).innerHTML))
+	{
+	 document.getElementById(id4).parentNode.style.backgroundColor = "green";
+
+ }
+}
+
+
+}
+
+					
+					}
+							}
+					});
+});
+						
+				 initialize();
+}
+				
+
+			google.maps.event.addDomListener(window, 'load', initialize());
+	</script>
+
+
+
+<div id="duration"></div>
+<link rel="stylesheet" type="text/css" href="table.css" />

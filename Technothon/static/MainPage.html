@@ -1,0 +1,167 @@
+<html lang="en">
+<head>
+<title>AQMS</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<style>
+.first {
+	height: 100%;
+	width: 80%;
+	border-size: 2px;
+	border-style: solid;
+	border-color: black;
+	float: right;
+}
+
+.second {
+	height: 100%;
+	width: 25%;
+	border-size: 2px;
+	border-style: solid;
+	border-color: black;
+	float: right;
+}
+
+#specification {
+	width: 20%;
+	height: 100%;
+	float: left;
+}
+
+table {
+	margin-left: 8px;
+}
+</style>
+
+<script type="text/javascript">
+var citymap = {
+
+	Nagpur_Station : {
+		center : {
+			lat : 21.1480676,
+			lng : 79.0819575
+		},
+
+	},
+	VCA_Stadium : {
+		center : {
+			lat : 20.9856987,
+			lng : 78.8901035
+		},
+
+	},
+	Futala_Lake : {
+		center : {
+			lat : 21.1493433,
+			lng : 79.0426549
+		},
+
+	},
+	Sadar : {
+		center : {
+			lat : 21.1530413,
+			lng : 79.1052747
+		}
+
+	}
+};
+
+	if (navigator.geolocation) {
+		navigator.geolocation
+				.getCurrentPosition(function(p) {
+					var LatLng = new google.maps.LatLng(p.coords.latitude,
+							p.coords.longitude);
+					var Nagpur_Station = new google.maps.LatLng( 21.1480676,
+							79.0819575);
+					var mapOptions = {
+						center : {
+							lat : 21.1213706,
+							lng : 79.0450958
+						},
+
+						zoom : 12,
+						mapTypeId : google.maps.MapTypeId.ROADMAP
+					};
+					//var mrk = 200;
+					var colorCode;
+					colorCode = '#228B22'
+
+					var map = new google.maps.Map(document
+							.getElementById("dvMap"), mapOptions);
+					var marker = new google.maps.Marker({
+						position : LatLng,
+						map : map,
+					//title : "The index of the Air for your location is:"
+					//		+ mrk
+					});
+					marker
+							.setIcon("https://maps.google.com/mapfiles/ms/icons/green-dot.png");
+
+					/*if (mrk < 100) {
+						marker
+								.setIcon('https://maps.google.com/mapfiles/ms/icons/green-dot.png');
+						colorCode = '#228B22'
+					} else {
+						marker
+								.setIcon('https://maps.google.com/mapfiles/ms/icons/red-dot.png');
+						colorCode = '#FF0000'
+					}*/
+
+					var circle = new google.maps.Circle({
+						map : map,
+						radius : 1800, // 10 miles in metres
+						fillColor : colorCode
+					});
+
+					circle.bindTo("center", marker, "position");
+
+					/*circle.addListener('click', function() {
+						window.location = "index.html"
+					});*/
+
+					for ( var city in citymap) {
+						// Add the circle for this city to the map.
+						var cityCircle = new google.maps.Circle({
+							strokeColor : "#FF0000",
+							strokeOpacity : 0.8,
+							strokeWeight : 2,
+							fillColor : "red",
+							fillOpacity : 0.35,
+							map : map,
+							center : citymap[city].center,
+							radius : 1600
+						});
+					}
+
+					google.maps.event.addListener(marker, "click", function(e) {
+						var infoWindow = new google.maps.InfoWindow();
+						infoWindow.setContent(marker.title);
+						infoWindow.open(map, marker);
+					});
+				});
+	} else {
+		alert("Geo Location feature is not supported in this browser.");
+	}
+
+
+
+
+
+	function test() {
+		window.location = "index.html";
+	}
+</script>
+<script type="text/javascript"
+	src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+<div class="first" id="dvMap" onclick='test()' style="width: 100%"></div>
+
+</body>

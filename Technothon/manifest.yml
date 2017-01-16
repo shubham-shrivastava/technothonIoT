@@ -1,0 +1,12 @@
+applications:
+- path: .
+  memory: 128M
+  instances: 1
+  domain: mybluemix.net
+  name: aqms-new
+  host: aqms-new
+  disk_quota: 1024M
+  services:
+  - aqms-node-cloudantNoSQLDB
+  - aqms-node-iotf-service
+  buildpack: python_buildpack

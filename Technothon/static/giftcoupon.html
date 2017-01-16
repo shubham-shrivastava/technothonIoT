@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html >
+<head>
+<script>
+function copyToClipboard(element) {
+
+  // Create a "hidden" input
+  var aux = document.createElement("input");
+
+  // Assign it the value of the specified element
+  aux.setAttribute("value", document.getElementById(element.id).innerHTML);
+
+  // Append it to the body
+  document.body.appendChild(aux);
+
+  // Highlight its content
+  aux.select();
+
+  // Copy the highlighted text
+  document.execCommand("copy");
+
+  // Remove it from the body
+  document.body.removeChild(aux);
+
+}
+</script>
+
+  <meta charset="UTF-8">
+  <title>Gift Coupons</title>
+  
+  
+  
+      <link rel="stylesheet" href="giftstyle.css">
+
+  
+</head>
+
+<body>
+<h2>Click on the coupon code to copy</h2>
+  <div id="buttons">
+<div class="pizza_hut button">
+	<img src="pizza_hut.jpg"></img>
+	<div class="social-container fb">
+		<div class="slide">
+			<a href="#" id="ph" onclick="copyToClipboard(this)">AQMS56PZ#4</a>	
+		</div>
+		 Buy 1 Get 1 free
+	</div>
+</div>
+<div class="rolls_mania button">
+	<img src="rolls_mania.jpg"></img>
+	<div class="social-container tw">
+		<div class="slide">
+			<a href="#" id="rm" onclick="copyToClipboard(this)">AQMS23Rm#8</a>
+		</div>
+		 15% Off!
+	</div>
+</div>
+<div class="haldiram button">
+	<img src="haldiram.jpg"></img>
+	<div class="social-container tw">
+		<div class="slide">
+			<a href="#" id="hr" onclick="copyToClipboard(this)">AQMS66HR*6</a>
+		</div>
+		 30% Off!
+	</div>
+</div>
+<div class="goli_vadapao button">
+	<img src="goli_vadapao.jpg"></img>
+	<div class="social-container tw">
+		<div class="slide">
+			<a href="#" id="gv" onclick="copyToClipboard(this)">AQMS21GV^g</a>
+		</div>
+		 40! off over Rs300+!
+	</div>
+</div>
+
+<div class="chaudhari button">
+	<img src="chaudhari.gif"></img>
+	<div class="social-container fb">
+		<div class="slide">
+			<a href="#" id="ch" onclick="copyToClipboard(this)">AQMS23CL1s</a>
+		</div>
+		 flat 25% off
+	</div>
+</div>
+
+<div class="life_style button">
+	<img src="life_style.jpg"></img>
+	<div class="social-container tw">
+		<div class="slide">
+			<a href="#" id="ls" onclick="copyToClipboard(this)">34aqmsLS</a>
+		</div>
+		 30% Off!
+	</div>
+</div>
+<div class="max button">
+	<img src="max.jpg"></img>
+	<div class="social-container tw">
+		<div class="slide">
+			<a href="#" id="maxx" onclick="copyToClipboard(this)">maxaqms</a>
+		</div>
+		 30% Off!
+	</div>
+</div>
+<div class="big_bazar button">
+	<img src="big_bazar.jpg"></img>
+	<div class="social-container tw">
+		<div class="slide">
+			<a href="#" id="bb" onclick="copyToClipboard(this)">BB40oFFaqms</a>
+		</div>
+		 40! off over Rs1300+!
+	</div>
+</div>
+
+<div class="pantaloons button">
+	<img src="pantaloons.png"></img>
+	<div class="social-container fb">
+		<div class="slide">
+			<a href="#" id="pan" onclick="copyToClipboard(this)">pan5</a>
+		</div>
+		 5% off!
+	</div>
+</div>
+<div class="lenskart button">
+	<img src="lenskart.jpg"></img>
+	<div class="social-container tw">
+		<div class="slide">
+			<a href="#" id="lens" onclick="copyToClipboard(this)">67aqms</a>
+		</div>
+		 10% Off!
+	</div>
+</div>
+<div class="myntra button">
+	<img src="myntra.jpg"></img>
+	<div class="social-container tw">
+		<div class="slide">
+			<a href="#" id="my" onclick="copyToClipboard(this)">myaqms40</a>
+		</div>
+		 40% Off!
+	</div>
+</div>
+<div class="oyo button">
+	<img src="oyo.png"></img>
+	<div class="social-container tw">
+		<div class="slide">
+			<a href="#" id="oyo" onclick="copyToClipboard(this)">oyo8aqms</a>
+		</div>
+		 8% off!
+	</div>
+</div>
+
+
+</div>
+
+  
+</body>
+</html>

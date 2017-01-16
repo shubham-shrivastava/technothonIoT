@@ -1,0 +1,724 @@
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+
+
+<script src="jquery.js"></script>
+<script src="jquery.jqplot.js"></script>
+<link rel="stylesheet" type="text/css" href="jquery.jqplot.css" />
+<link rel="stylesheet" type="text/css" href="table.css" />
+<div class="row">
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+		<h2>
+			<b>AQI Index For Your Location</b>
+		</h2>
+		<div id="chart"></div>
+	</div>
+	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+		<h2>
+			<b>Change Location:</b>
+		</h2>
+		<select class="selectpicker" ng-model="location" id="loc"
+			ng-change="changeLoc(location)"
+			ng-options="x.location[1] as x.location[0] for x in locations">
+			<!--<option ng-repeat="x in locations" value="{{x.location[1]}}">{{x.location[0]}}</option>-->
+			<!--<option value="1.1" selected>ITPark</option>
+		<option value="2.1">Mate chowk</option>
+		<option value="2.2">Pratap Nagar chowk</option>
+		<option value="1.2">Persistent</option>
+		<option value="3.1">Sambhaji chowk</option>-->
+		</select>
+		<div id="map" style="height: 300px"></div>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-xs-12">
+	<h2>
+		<b>Know The Air Around You</b>
+	</h2>
+	<table border="2">
+		<thead>
+			<tr>
+
+				<th>AQI</th>
+				<th>Condition</th>
+				<th>Impact</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+
+				<td style="background-color: green">0-50</td>
+				<td>Good</td>
+				<td>Minimal impact</td>
+
+			</tr>
+			<tr>
+
+				<td style="background-color: lime">50-100</td>
+				<td>Satisfactory</td>
+				<td>May cause minor breathing discomfort to sensitive people</td>
+			</tr>
+			<tr>
+
+				<td style="background-color: yellow">100-200</td>
+				<td>Moderate</td>
+				<td>May cause discomfort to people with lung disease as asthma,
+					or heart disease,children and older adults.</td>
+
+			</tr>
+			<tr>
+
+				<td style="background-color: orange">200-300</td>
+				<td>Poor</td>
+				<td>May cause respiratory illness to the people on prolonged
+					exposure. Effect may be more pronounced in people with heart
+					diseases.</td>
+
+			</tr>
+			<tr>
+
+				<td style="background-color: red">300-400</td>
+				<td>Very Poor</td>
+				<td>May cause respiratory illness to the people on prolonged
+					exposure. Effect may be more pronounced in people with lung and
+					heart diseases.</td>
+
+			</tr>
+			<tr>
+
+				<td style="background-color: brown">400-500</td>
+				<td>Severe</td>
+				<td>May cause respiratory imapct even on healthy people, and
+					serious health impacts on people with lung heart disease. The
+					health impacts may be experienced even during light physical
+					activity</td>
+
+			</tr>
+		</tbody>
+	</table>
+	</div>
+</div>
+
+
+
+
+
+<div class="row">
+	<br>
+
+	<div class="col-sm-2 col-md-2 col-lg-2"></div>
+	<div class="col-sm-8 col-md-8 col-lg-8">
+		<h2>
+			<b>Next Week's Forecast</b>
+		</h2>
+		<script>
+			var weekDays = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
+					'Friday', 'Saturday', 'Sunday' ]
+			var d = new Date();
+			var index = d.getDay();
+			console.log(index);
+			document.getElementById('btn1').innerHTML = weekDays[index];
+			index = (index + 1) % 7;
+			document.getElementById('btn2').innerHTML = weekDays[index];
+			index = (index + 1) % 7;
+			document.getElementById('btn3').innerHTML = weekDays[index];
+			index = (index + 1) % 7;
+			document.getElementById('btn4').innerHTML = weekDays[index];
+			index = (index + 1) % 7;
+			document.getElementById('btn5').innerHTML = weekDays[index];
+			index = (index + 1) % 7;
+			document.getElementById('btn6').innerHTML = weekDays[index];
+			index = (index + 1) % 7;
+			document.getElementById('btn7').innerHTML = weekDays[index];
+			index = (index + 1) % 7;
+		</script>
+		<!-- Day 1 -->
+		<button id="btn1" type="button" class="btn btn-primary"
+			style="width: 100%; text-align: left;" data-toggle="collapse"
+			data-target="#demo1"></button>
+		<div id="demo1" class="collapse">
+			<div id="t1" class="table-title"></div>
+			<table id="t1" class="table-fill">
+				<thead>
+					<tr>
+						<th class="text-left">Parameter</th>
+						<th class="text-left">Value</th>
+					</tr>
+				</thead>
+				<tbody class="table-hover">
+					<tr>
+						<td class="text-left">AQI</td>
+						<td class="text-left" id="AQI1"></td>
+					</tr>
+					<tr>
+						<td class="text-left">CO2</td>
+						<td class="text-left" id="CO21"></td>
+					</tr>
+					<tr>
+						<td class="text-left">CO</td>
+						<td class="text-left" id="CO1"></td>
+					</tr>
+					<tr>
+						<td class="text-left">NO2</td>
+						<td class="text-left" id="NO21"></td>
+					</tr>
+					<tr>
+						<td class="text-left">SO2</td>
+						<td class="text-left" id="SO21"></td>
+					</tr>
+					<tr>
+						<td class="text-left">PM2.5</td>
+						<td class="text-left" id="PM1"></td>
+					</tr>
+					<tr>
+						<td class="text-left">Temperature</td>
+						<td class="text-left" id="temp1"></td>
+					</tr>
+					<!-- <tr>
+						<td class="text-left">Humidity</td>
+						<td class="text-left" id="humid1"></td>
+					</tr>
+					<tr>
+						<td class="text-left">Precipitation</td>
+						<td class="text-left" id="ppt1"></td>
+					</tr> -->
+				</tbody>
+			</table>
+		</div>
+
+		<!-- Day2 -->
+		<button id="btn2" type="button" class="btn btn-primary"
+			style="width: 100%; text-align: left;" data-toggle="collapse"
+			data-target="#demo2"></button>
+		<div id="demo2" class="collapse">
+
+			<table id="t2" class="table-fill">
+				<thead>
+					<tr>
+						<th class="text-left">Parameter</th>
+						<th class="text-left">Value</th>
+					</tr>
+				</thead>
+				<tbody class="table-hover">
+					<tr>
+						<td class="text-left">AQI</td>
+						<td class="text-left" id="AQI2"></td>
+					</tr>
+					<tr>
+						<td class="text-left">CO2</td>
+						<td class="text-left" id="CO22"></td>
+					</tr>
+					<tr>
+						<td class="text-left">CO</td>
+						<td class="text-left" id="CO2"></td>
+					</tr>
+					<tr>
+						<td class="text-left">NO2</td>
+						<td class="text-left" id="NO22"></td>
+					</tr>
+					<tr>
+						<td class="text-left">SO2</td>
+						<td class="text-left" id="SO22"></td>
+					</tr>
+					<tr>
+						<td class="text-left">PM2.5</td>
+						<td class="text-left" id="PM2"></td>
+					</tr>
+					<tr>
+						<td class="text-left">Temperature</td>
+						<td class="text-left" id="temp2"></td>
+					</tr>
+					<!-- <tr>
+						<td class="text-left">Humidity</td>
+						<td class="text-left" id="humid2"></td>
+					</tr>
+					<tr>
+						<td class="text-left">Precipitation</td>
+						<td class="text-left" id="ppt2"></td>
+					</tr> -->
+				</tbody>
+			</table>
+
+		</div>
+
+		<!-- Day3 -->
+		<button id="btn3" type="button" class="btn btn-primary"
+			style="width: 100%; text-align: left;" data-toggle="collapse"
+			data-target="#demo3"></button>
+		<div id="demo3" class="collapse">
+
+			<table id="t3" class="table-fill">
+				<thead>
+					<tr>
+						<th class="text-left">Parameter</th>
+						<th class="text-left">Value</th>
+					</tr>
+				</thead>
+				<tbody class="table-hover">
+					<tr>
+						<td class="text-left">AQI</td>
+						<td class="text-left" id="AQI3"></td>
+					</tr>
+					<tr>
+						<td class="text-left">CO2</td>
+						<td class="text-left" id="CO23"></td>
+					</tr>
+					<tr>
+						<td class="text-left">CO</td>
+						<td class="text-left" id="CO3"></td>
+					</tr>
+					<tr>
+						<td class="text-left">NO2</td>
+						<td class="text-left" id="NO23"></td>
+					</tr>
+					<tr>
+						<td class="text-left">SO2</td>
+						<td class="text-left" id="SO23"></td>
+					</tr>
+					<tr>
+						<td class="text-left">PM2.5</td>
+						<td class="text-left" id="PM3"></td>
+					</tr>
+					<tr>
+						<td class="text-left">Temperature</td>
+						<td class="text-left" id="temp3"></td>
+					</tr>
+					<!-- <tr>
+						<td class="text-left">Humidity</td>
+						<td class="text-left" id="humid3"></td>
+					</tr>
+					<tr>
+						<td class="text-left">Precipitation</td>
+						<td class="text-left" id="ppt3"></td>
+					</tr> -->
+				</tbody>
+			</table>
+		</div>
+
+		<!-- Day4 -->
+		<button id="btn4" type="button" class="btn btn-primary"
+			style="width: 100%; text-align: left;" data-toggle="collapse"
+			data-target="#demo4"></button>
+		<div id="demo4" class="collapse">
+
+			<table id="t4" class="table-fill">
+				<thead>
+					<tr>
+						<th class="text-left">Parameter</th>
+						<th class="text-left">Value</th>
+					</tr>
+				</thead>
+				<tbody class="table-hover">
+					<tr>
+						<td class="text-left">AQI</td>
+						<td class="text-left" id="AQI4"></td>
+					</tr>
+					<tr>
+						<td class="text-left">CO2</td>
+						<td class="text-left" id="CO24"></td>
+					</tr>
+					<tr>
+						<td class="text-left">CO</td>
+						<td class="text-left" id="CO4"></td>
+					</tr>
+					<tr>
+						<td class="text-left">NO2</td>
+						<td class="text-left" id="NO24"></td>
+					</tr>
+					<tr>
+						<td class="text-left">SO2</td>
+						<td class="text-left" id="SO24"></td>
+					</tr>
+					<tr>
+						<td class="text-left">PM2.5</td>
+						<td class="text-left" id="PM4"></td>
+					</tr>
+					<tr>
+						<td class="text-left">Temperature</td>
+						<td class="text-left" id="temp4"></td>
+					</tr>
+					<!-- <tr>
+						<td class="text-left">Humidity</td>
+						<td class="text-left" id="humid4"></td>
+					</tr>
+					<tr>
+						<td class="text-left">Precipitation</td>
+						<td class="text-left" id="ppt4"></td>
+					</tr> -->
+				</tbody>
+			</table>
+		</div>
+
+		<!-- Day5 -->
+		<button id="btn5" type="button" class="btn btn-primary"
+			style="width: 100%; text-align: left;" data-toggle="collapse"
+			data-target="#demo5"></button>
+		<div id="demo5" class="collapse">
+
+			<table id="t5" class="table-fill">
+				<thead>
+					<tr>
+						<th class="text-left">Parameter</th>
+						<th class="text-left">Value</th>
+					</tr>
+				</thead>
+				<tbody class="table-hover">
+					<tr>
+						<td class="text-left">AQI</td>
+						<td class="text-left" id="AQI5"></td>
+					</tr>
+					<tr>
+						<td class="text-left">CO2</td>
+						<td class="text-left" id="CO25"></td>
+					</tr>
+					<tr>
+						<td class="text-left">CO</td>
+						<td class="text-left" id="CO5"></td>
+					</tr>
+					<tr>
+						<td class="text-left">NO2</td>
+						<td class="text-left" id="NO25"></td>
+					</tr>
+					<tr>
+						<td class="text-left">SO2</td>
+						<td class="text-left" id="SO25"></td>
+					</tr>
+					<tr>
+						<td class="text-left">PM2.5</td>
+						<td class="text-left" id="PM5"></td>
+					</tr>
+					<tr>
+						<td class="text-left">Temperature</td>
+						<td class="text-left" id="temp5"></td>
+					</tr>
+					<!-- <tr>
+						<td class="text-left">Humidity</td>
+						<td class="text-left" id="humid5"></td>
+					</tr>
+					<tr>
+						<td class="text-left">Precipitation</td>
+						<td class="text-left" id="ppt5"></td>
+					</tr> -->
+				</tbody>
+			</table>
+		</div>
+		<!-- Day6 -->
+		<button id="btn6" type="button" class="btn btn-primary"
+			style="width: 100%; text-align: left;" data-toggle="collapse"
+			data-target="#demo6"></button>
+		<div id="demo6" class="collapse">
+
+			<table id="t6" class="table-fill">
+				<thead>
+					<tr>
+						<th class="text-left">Parameter</th>
+						<th class="text-left">Value</th>
+					</tr>
+				</thead>
+				<tbody id="t7" class="table-hover">
+					<tr>
+						<td class="text-left">AQI</td>
+						<td class="text-left" id="AQI6"></td>
+					</tr>
+					<tr>
+						<td class="text-left">CO2</td>
+						<td class="text-left" id="CO26"></td>
+					</tr>
+					<tr>
+						<td class="text-left">CO</td>
+						<td class="text-left" id="CO6"></td>
+					</tr>
+					<tr>
+						<td class="text-left">NO2</td>
+						<td class="text-left" id="NO26"></td>
+					</tr>
+					<tr>
+						<td class="text-left">SO2</td>
+						<td class="text-left" id="SO26"></td>
+					</tr>
+					<tr>
+						<td class="text-left">PM2.5</td>
+						<td class="text-left" id="PM6"></td>
+					</tr>
+					<tr>
+						<td class="text-left">Temperature</td>
+						<td class="text-left" id="temp6"></td>
+					</tr>
+					<!-- <tr>
+						<td class="text-left">Humidity</td>
+						<td class="text-left" id="humid6"></td>
+					</tr>
+					<tr>
+						<td class="text-left">Precipitation</td>
+						<td class="text-left" id="ppt6"></td>
+					</tr> -->
+				</tbody>
+			</table>
+		</div>
+		<!-- Day7 -->
+
+		<button id="btn7" type="button" class="btn btn-primary"
+			style="width: 100%; text-align: left;" data-toggle="collapse"
+			data-target="#demo7"></button>
+		<div id="demo7" class="collapse">
+
+			<table class="table-fill">
+				<thead>
+					<tr>
+						<th class="text-left">Parameter</th>
+						<th class="text-left">Value</th>
+					</tr>
+				</thead>
+				<tbody id="t7" class="table-hover">
+					<tr>
+						<td class="text-left">AQI</td>
+						<td class="text-left" id="AQI7"></td>
+					</tr>
+					<tr>
+						<td class="text-left">CO2</td>
+						<td class="text-left" id="CO27"></td>
+					</tr>
+					<tr>
+						<td class="text-left">CO</td>
+						<td class="text-left" id="CO7"></td>
+					</tr>
+					<tr>
+						<td class="text-left">NO2</td>
+						<td class="text-left" id="NO27"></td>
+					</tr>
+					<tr>
+						<td class="text-left">SO2</td>
+						<td class="text-left" id="SO27"></td>
+					</tr>
+					<tr>
+						<td class="text-left">PM2.5</td>
+						<td class="text-left" id="PM7"></td>
+					</tr>
+					<tr>
+						<td class="text-left">Temperature</td>
+						<td class="text-left" id="temp7"></td>
+					</tr>
+					<!-- <tr>
+						<td class="text-left">Humidity</td>
+						<td class="text-left" id="humid7"></td>
+					</tr>
+					<tr>
+						<td class="text-left">Precipitation</td>
+						<td class="text-left" id="ppt7"></td>
+					</tr> -->
+				</tbody>
+			</table>
+		</div>
+
+
+
+
+	</div>
+	<div class="col-sm-2 col-md-2 col-lg-2"></div>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+</div>
+<!--<script src="jquery.js"></script>-->
+<!--<script language="javascript" type="text/javascript" src="jquery.jqplot.min.js"></script>-->
+<script type="text/javascript" src="jqplot.meterGaugeRenderer.js"></script>
+<script type="text/javascript" src="meter.js"></script>
+
+<script>
+
+			$(function() {
+
+		var loc, url;
+
+		$('#loc').on('change', function(e) {
+			updateForecast();
+			myMap();
+		});
+
+		function updateForecast() {
+			 loc = angular.element('[ng-controller="HomeController"]')
+					.scope().location;
+		 	url = "/api/forecast?loc=" + loc;
+					$
+						.get(
+							url,
+							function(data, status) {
+
+								var aqi = "AQI";
+								var co2 = "CO2";
+								var co = "CO";
+								var no2 = "NO2";
+								var so2 = "SO2";
+								var pm = "PM";
+								var temp = "temp";
+								var humid = "humid";
+								var ppt = "ppt";
+
+								//document.getElementById("AQI1").innerHTML=data.results[0].AQI;
+
+								for (var i = 1; i <= 7; i++) {
+									var j = i - 1;
+									var aqifinal = aqi.concat(i);
+									var co2final = co2.concat(i);
+									var cofinal = co.concat(i);
+									var so2final = so2.concat(i);
+									var no2final = no2.concat(i);
+									var pmfinal = pm.concat(i);
+									var tempfinal = temp.concat(i);
+									//	var humidfinal = humid.concat(i);
+									//	var pptfinal = ppt.concat(i);
+									//console.log(data.results[j].AQI);
+
+var val=parseInt(data.results[j].AQI, 10);
+if (val <=50) {
+document.getElementById(aqifinal).style.backgroundColor="green";
+}
+else if(val > 50 && val<=100){
+document.getElementById(aqifinal).style.backgroundColor="lime";
+}
+else if(val > 100 && val<=200){
+document.getElementById(aqifinal).style.backgroundColor="yellow";
+}
+else if(val > 200 && val<=300){
+document.getElementById(aqifinal).style.backgroundColor="orange";
+}
+else if(val > 300 && val<=400){
+document.getElementById(aqifinal).style.backgroundColor="red";
+}
+else if(val > 400 && val<=500){
+document.getElementById(aqifinal).style.backgroundColor="brown";
+}
+
+									document.getElementById(aqifinal).innerHTML = data.results[j].AQI;
+									document.getElementById(co2final).innerHTML = data.results[j].co2;
+									document.getElementById(cofinal).innerHTML = data.results[j].co;
+									document.getElementById(so2final).innerHTML = data.results[j].so2;
+									document.getElementById(no2final).innerHTML = data.results[j].no2;
+									document.getElementById(pmfinal).innerHTML = data.results[j].pm25;
+									document.getElementById(tempfinal).innerHTML = data.results[j].temp;
+									//document.getElementById(humidfinal).innerHTML = data.results[j].humidity;
+									//document.getElementById(pptfinal).innerHTML = data.results[j].ppt;
+								}
+							});
+		}
+
+		updateForecast();
+
+	});
+
+	function myMap() {
+		/*var mapCanvas =  document.getElementById("map");
+		 var mapOptions = {
+		    center: new google.maps.LatLng(51.5, -0.2),
+		   zoom: 10
+		 }
+		 var  map = new google.maps.Map(mapCanvas, mapOptions);
+		}*/
+		var loc = parseFloat(angular
+				.element('[ng-controller="HomeController"]').scope().location);
+
+		$.get(
+						"https://aqms-node.mybluemix.net/api/getdata?loc="
+								+ loc.toString() + "&limit=1",
+						function(data, status) {
+
+							var aqi = data[0].aqi;
+							if (navigator.geolocation) {
+								navigator.geolocation
+										.getCurrentPosition(function(p) {
+											var LatLng
+
+											//console.log(loc);
+											//console.log(aqi);
+											//var Loc = 2.2;
+											if (loc == 1.1) {
+												LatLng = new google.maps.LatLng(
+														18.597059,
+														73.71882329999994);
+											}
+
+											else if (loc == 1.2) {
+												LatLng = new google.maps.LatLng(
+														18.5308225,
+														73.8474640000005);
+											}
+
+											else if (loc == 2.1) {
+												LatLng = new google.maps.LatLng(
+														18.5073985,
+														73.80765040000006);
+											}
+
+											else if (loc == 2.2) {
+												LatLng = new google.maps.LatLng(
+														18.4575324,
+														73.86774639999999);
+											} else if (loc == 3.1) {
+												LatLng = new google.maps.LatLng(
+														18.5416299, 73.8024097);
+
+											}
+
+											var mapOptions = {
+												center : LatLng,
+												zoom : 13,
+												mapTypeId : google.maps.MapTypeId.ROADMAP
+											};
+											//var mrk = 200;
+											var colorCode;
+											var map = new google.maps.Map(
+													document
+															.getElementById("map"),
+													mapOptions);
+											var marker = new google.maps.Marker(
+													{
+														position : LatLng,
+														map : map,
+														title : "The index of the Air for your location is: "
+																+ aqi
+													});
+
+											if (aqi < 100) {
+												marker
+														.setIcon('https://maps.google.com/mapfiles/ms/icons/green-dot.png');
+												colorCode = '#228B22'
+											} else {
+												marker
+														.setIcon('https://maps.google.com/mapfiles/ms/icons/red-dot.png');
+												colorCode = '#FF0000'
+											}
+											var circle = new google.maps.Circle(
+													{
+														map : map,
+														radius : 1700, // 10 miles in metres
+														fillColor : colorCode
+													});
+											circle.bindTo('center', marker,
+													'position');
+
+											google.maps.event
+													.addListener(
+															marker,
+															"click",
+															function(e) {
+																var infoWindow = new google.maps.InfoWindow();
+																infoWindow
+																		.setContent(marker.title);
+																infoWindow
+																		.open(
+																				map,
+																				marker);
+															});
+										});
+							} else {
+								alert('Geo Location feature is not supported in this browser.');
+							}
+						});
+	}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?callback=myMap" crossorigin="anonymous"></script> 

@@ -1,0 +1,213 @@
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"
+	integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-progressbar/0.9.0/bootstrap-progressbar.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
+<!-- FLOT RESIZE PLUGIN - allows the chart to redraw when the window is resized -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.resize.min.js"></script>
+<!-- FLOT PIE PLUGIN - also used to draw donut charts -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.pie.min.js"></script>
+<!-- FLOT CATEGORIES PLUGIN - Used to draw bar charts -->
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.categories.min.js"></script>
+<div class="container">
+	<ul class="nav nav-pills">
+		<li><a href="#parameters">Today's</a></li>
+		<li><a href="#daily">Daily</a></li>
+		<li class="active"><a href="#weekly">Weekly</a></li>
+		<li><a href="#monthly">Monthly</a></li>
+	</ul>
+	<br />
+	<div>
+	Enter Date: <input type="date" id="date" placeholder="mm/dd/yyyy">
+	<input type="button" id="btn" value="Show" />
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12 col-sm-6" ng-show="Temperature_div">
+			<!-- interactive chart -->
+			<div class="box box-primary" style="height: 100%; margin: 20px">
+				<i class="fa fa-bar-chart-o"></i>
+				<h3 class="box-title">Temperature</h3>
+				<!--<div class="pull-right">
+					Temperature:
+					<h4 id="currtemp"></h4>
+				</div>-->
+
+				<div class="box-body">
+					<div id="interactive" style="height: 400px;">
+						<img src="images/spiffygif_34x34.gif"
+							class="img-responsive center-block" />
+					</div>
+				</div>
+				<!-- /.box-body-->
+			</div>
+			<!-- /.box -->
+
+		</div>
+		<!-- /.col -->
+
+		<div class="col-xs-12 col-sm-6" ng-show="Humidity_div">
+			<!-- interactive chart -->
+			<div class="box box-primary" style="height: 100%; margin: 20px">
+				<div class="box-header with-border">
+					<i class="fa fa-bar-chart-o"></i>
+					<h3 class="box-title">Humidity</h3>
+					<!--<div class="pull-right">
+						Humidity:
+						<h4 id="currhumid"></h4>
+					</div>-->
+				</div>
+				<div class="box-body">
+					<div id="interactive_humid" style="height: 400px">
+						<img src="images/spiffygif_34x34.gif"
+							class="img-responsive center-block" />
+					</div>
+				</div>
+				<!-- /.box-body-->
+			</div>
+			<!-- /.box -->
+
+		</div>
+		<!-- /.col -->
+
+
+		<div class="col-xs-12 col-sm-6" ng-show="CO2_div">
+			<!-- interactive chart -->
+			<div class="box box-primary" style="height: 100%; margin: 20px">
+				<div class="box-header with-border">
+					<i class="fa fa-bar-chart-o"></i>
+					<h3 class="box-title">Carbon Dioxide level</h3>
+					<!--<div class="pull-right">
+						CO2:
+						<h4 id="currco2"></h4>
+					</div>-->
+				</div>
+				<div class="box-body">
+					<div id="interactive_co2" style="height: 400px;">
+						<img src="images/spiffygif_34x34.gif"
+							class="img-responsive center-block" />
+					</div>
+				</div>
+				<!-- /.box-body-->
+			</div>
+			<!-- /.box -->
+
+		</div>
+		<!-- /.col -->
+
+
+		<!--co livefeed  -->
+
+		<div class="col-xs-12 col-sm-6" ng-show="CO_div">
+			<!-- interactive chart -->
+			<div class="box box-primary" style="height: 100%; margin: 20px">
+				<div class="box-header with-border">
+					<i class="fa fa-bar-chart-o"></i>
+					<h3 class="box-title">Carbon Monoxide level</h3>
+					<!--<div class="pull-right">
+						CO:
+						<h4 id="currco"></h4>
+					</div>-->
+				</div>
+				<div class="box-body">
+					<div id="interactive_co" style="height: 400px;">
+						<img src="images/spiffygif_34x34.gif"
+							class="img-responsive center-block" />
+					</div>
+				</div>
+				<!-- /.box-body-->
+			</div>
+			<!-- /.box -->
+
+		</div>
+		<!-- /.col -->
+
+		<!--no livefeed  -->
+
+		<div class="col-xs-12 col-sm-6" ng-show="NO2_div">
+			<!-- interactive chart -->
+			<div class="box box-primary" style="height: 100%; margin: 20px">
+				<div class="box-header with-border">
+					<i class="fa fa-bar-chart-o"></i>
+					<h3 class="box-title">Nitrogen Dioxide level</h3>
+					<!--<div class="pull-right">
+						NO<sub>2</sub>:
+						<h4 id="currno"></h4>
+					</div>-->
+				</div>
+				<div class="box-body">
+					<div id="interactive_no2" style="height: 400px;">
+						<img src="images/spiffygif_34x34.gif"
+							class="img-responsive center-block" />
+					</div>
+				</div>
+				<!-- /.box-body-->
+			</div>
+			<!-- /.box -->
+
+		</div>
+		<!-- /.col -->
+
+		<!--so livefeed  -->
+
+		<div class="col-xs-12 col-sm-6" ng-show="SO2_div">
+			<!-- interactive chart -->
+			<div class="box box-primary" style="height: 100%; margin: 20px">
+				<div class="box-header with-border">
+					<i class="fa fa-bar-chart-o"></i>
+					<h3 class="box-title">Sulphur Dioxide level</h3>
+					<!--<div class="pull-right">
+						SO<sub>2</sub>:
+						<h4 id="currso"></h4>
+					</div>-->
+				</div>
+				<div class="box-body">
+					<div id="interactive_so2" style="height: 400px;">
+						<img src="images/spiffygif_34x34.gif"
+							class="img-responsive center-block" />
+					</div>
+				</div>
+				<!-- /.box-body-->
+			</div>
+			<!-- /.box -->
+
+		</div>
+		<!-- /.col -->
+
+		<!--pm livefeed  -->
+
+		<div class="col-xs-12 col-sm-6" ng-show="PM_div">
+			<!-- interactive chart -->
+			<div class="box box-primary" style="height: 100%; margin: 20px">
+				<div class="box-header with-border">
+					<i class="fa fa-bar-chart-o"></i>
+					<h3 class="box-title">
+						PM<sub>2.5</sub> level
+					</h3>
+					<!--<div class="pull-right">
+						PM<sub>2.5</sub>:
+						<h4 id="currpm"></h4>
+					</div>-->
+				</div>
+				<div class="box-body">
+					<div id="interactive_pm25" style="height: 400px;">
+						<img src="images/spiffygif_34x34.gif"
+							class="img-responsive center-block" />
+					</div>
+				</div>
+				<!-- /.box-body-->
+			</div>
+			<!-- /.box -->
+
+		</div>
+		<!-- /.col -->
+
+	</div>
+</div>
+
+<script src="weeklygraphfinal.js"></script>
